@@ -37443,6 +37443,7 @@ game_menus = [
     "{s10}",
     "none",
     [
+      (set_background_mesh, "mesh_pic_thing"),
       (assign, "$pool_troop", "trp_temp_troop"),
       (assign, reg20,0),
       (troop_get_inventory_capacity, ":inv_cap", "$pool_troop"),
