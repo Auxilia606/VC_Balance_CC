@@ -78046,6 +78046,166 @@ vc_text_scripts = [
       (eq, ":trained", 0), #no one left to train?
   ]),
   
+  ("transfer_inventory", [
+    (store_script_param, ":source", 1),
+    (store_script_param, ":dest", 2),
+    #(store_script_param, ":trans_book", 3),
+
+    (store_free_inventory_capacity, ":space", ":dest"),
+    (troop_sort_inventory, ":source"),
+
+    (troop_get_inventory_capacity, ":inv_cap", ":source"),
+    (try_for_range, ":i_slot", 10, ":inv_cap"),
+      (troop_get_inventory_slot, ":item", ":source", ":i_slot"),
+      (troop_get_inventory_slot_modifier, ":imod", ":source", ":i_slot"),
+      (gt, ":item", -1),
+
+      #(assign, ":continue", 1),
+      (gt, ":space", 0),
+      (troop_add_item, ":dest", ":item", ":imod"),
+      (val_sub, ":space", 1),
+      (try_begin),
+        (is_between, ":item", trade_goods_begin, trade_goods_end),
+        (troop_inventory_slot_get_item_amount, ":amount", ":source", ":i_slot"),
+        (troop_get_inventory_capacity, ":dest_inv_cap", ":dest"),
+        (store_sub, ":dest_slot", ":dest_inv_cap", ":space"),
+        (troop_inventory_slot_set_item_amount, ":dest", ":dest_slot", ":amount"),
+      (try_end),
+      (troop_set_inventory_slot, ":source", ":i_slot", -1),
+    (try_end),
+  ]),
+  
+  ("get_item_value_with_imod",
+  [# returns the sell price based on the item's money value and its imod
+    (store_script_param, ":item", 1),
+    (store_script_param, ":imod", 2),
+
+    (store_item_value, ":score", ":item"),
+    (item_get_slot, ":imod_multiplier", ":imod", slot_item_modifier_multiplier),
+    (val_mul, ":score", ":imod_multiplier"),
+    (assign, reg0, ":score"),
+  ]),
+  
+  ("transfer_best_items_to_dest_troop_by_price",
+    [
+      (store_script_param, ":dest_troop", 1),
+      (store_script_param, ":source_troop_begin", 2),
+      (store_script_param, ":source_troop_end", 3),
+      (store_script_param, ":num_times", 4),
+      
+      (store_add, ":source_troop_end_plus_one", ":source_troop_end", 1),
+      (try_for_range, ":cur_troop", ":source_troop_begin", ":source_troop_end_plus_one"),
+        (call_script, "script_transfer_inventory", ":dest_troop", ":cur_troop", 0),
+      (try_end),
+      
+      (troop_clear_inventory, ":dest_troop"),
+      (try_for_range, ":unused", 0, ":num_times"), # for 86 times or 96 times
+        # find the best item
+        (assign, ":best_score", 0),
+        (assign, ":best_troop", -1),
+        (assign, ":best_slot", -1),
+        (try_for_range, ":cur_troop", ":source_troop_begin", ":source_troop_end_plus_one"),
+          (troop_get_inventory_capacity, ":inv_cap", ":cur_troop"),
+          (try_for_range, ":i_slot", 10, ":inv_cap"),
+            (troop_get_inventory_slot, ":item", ":cur_troop", ":i_slot"),
+            (troop_get_inventory_slot_modifier, ":imod", ":cur_troop", ":i_slot"),
+            (gt, ":item", -1),
+            (call_script, "script_get_item_value_with_imod", ":item", ":imod"),
+            (assign, ":score", reg0),
+            (val_div, ":score", 100),
+            (val_max, ":score",1),
+            (gt, ":score", ":best_score"),
+            (assign, ":best_score", ":score"),
+            (assign, ":best_troop", ":cur_troop"),
+            (assign, ":best_slot", ":i_slot"),
+          (try_end),
+        (try_end),
+        (gt, ":best_score", 0),
+        # already found
+        (troop_get_inventory_slot, ":item", ":best_troop", ":best_slot"),
+        (troop_get_inventory_slot_modifier, ":imod", ":best_troop", ":best_slot"),
+        (troop_add_item, ":dest_troop", ":item", ":imod"), # add to dest_troop
+        (troop_set_inventory_slot, ":best_troop", ":best_slot", -1), # remove it 
+      (try_end),
+  ]),
+
+  ("transfer_special_inventory", [
+    (store_script_param, ":source", 1),
+    (store_script_param, ":dest", 2),
+
+    (store_free_inventory_capacity, ":space", ":dest"),
+    (troop_sort_inventory, ":source"),
+
+    (troop_get_inventory_capacity, ":inv_cap", ":source"),
+    (try_for_range, ":i_slot", 10, ":inv_cap"),
+      (troop_get_inventory_slot, ":item", ":source", ":i_slot"),
+      (troop_get_inventory_slot_modifier, ":imod", ":source", ":i_slot"),
+      (gt, ":item", -1),
+      
+      (assign, ":continue", 0),
+      (try_begin),
+        (call_script, "script_get_item_value_with_imod", ":item", ":imod"),
+        (assign, ":item_value", reg0),
+        (val_div, ":item_value", 100),
+        (ge, ":item_value", "$g_price_threshold_for_picking"),
+        (assign, ":continue", 1),
+      (else_try),
+        (item_get_type, ":item_type", ":item"),
+        (this_or_next|eq, ":item_type", itp_type_goods),
+        (this_or_next|eq, ":item_type", itp_type_animal),
+        (eq, ":item_type", itp_type_book),
+        (assign, ":continue", 1),
+      (try_end),
+      (eq, ":continue", 1),
+      
+      (gt, ":space", 0),
+      (troop_add_item, ":dest", ":item", ":imod"),
+      (val_sub, ":space", 1),
+      (try_begin),
+        (is_between, ":item", trade_goods_begin, trade_goods_end),
+        (troop_inventory_slot_get_item_amount, ":amount", ":source", ":i_slot"),
+        (troop_get_inventory_capacity, ":dest_inv_cap", ":dest"),
+        (store_sub, ":dest_slot", ":dest_inv_cap", ":space"),
+        (troop_inventory_slot_set_item_amount, ":dest", ":dest_slot", ":amount"),
+      (try_end),
+      (troop_set_inventory_slot, ":source", ":i_slot", -1),
+    (try_end),
+  ]),
+
+  ("sort_food", [
+    (store_script_param, ":troop_no", 1),
+    
+    (troop_get_inventory_capacity, ":inv_cap", ":troop_no"),
+    (try_for_range, ":i_slot", 10, ":inv_cap"),
+      (troop_get_inventory_slot, ":item", ":troop_no", ":i_slot"),
+      (troop_get_inventory_slot_modifier, ":imod", ":troop_no", ":i_slot"),
+      (gt, ":item", -1),
+      (is_between, ":item", food_begin, food_end),
+      (try_for_range, ":i_slot_2", ":i_slot", ":inv_cap"),
+        (neq, ":i_slot_2", ":i_slot"),
+        (troop_get_inventory_slot, ":item_2", ":troop_no", ":i_slot_2"),
+        (troop_get_inventory_slot_modifier, ":imod_2", ":troop_no", ":i_slot_2"),
+        (gt, ":item_2", -1),
+        (eq, ":item_2", ":item"),
+        (eq, ":imod_2", ":imod"),
+        (troop_inventory_slot_get_item_max_amount, ":max_amount", ":troop_no", ":i_slot"),
+        (troop_inventory_slot_get_item_amount, ":item_amount", ":troop_no", ":i_slot"),
+        (troop_inventory_slot_get_item_amount, ":item_amount_2", ":troop_no", ":i_slot_2"),
+        (store_add, ":total_amount", ":item_amount", ":item_amount_2"),
+        (store_sub, ":dest_amount_i_slot_2", ":total_amount", ":max_amount"),
+        (try_begin),
+          (gt, ":dest_amount_i_slot_2", 0),
+          (troop_inventory_slot_set_item_amount, ":troop_no", ":i_slot", ":max_amount"),
+          (troop_inventory_slot_set_item_amount, ":troop_no", ":i_slot_2", ":dest_amount_i_slot_2"),
+          (assign, ":i_slot_2", 0), # stop 
+        (else_try),
+          (troop_inventory_slot_set_item_amount, ":troop_no", ":i_slot", ":total_amount"),
+          (troop_set_inventory_slot, ":troop_no", ":i_slot_2", -1), # delete it
+        (try_end),
+      (try_end),
+    (try_end),
+  ]),
+
 ]
 
 scripts = edited_native_scripts + vc_scripts + vc_sea_scripts + vc_text_scripts + multi_scripts

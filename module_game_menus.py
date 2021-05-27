@@ -37438,4 +37438,113 @@ game_menus = [
     ]
   ),
 
+  ("manage_loot_pool",
+    0,
+    "{s10}",
+    "none",
+    [
+      (assign, "$pool_troop", "trp_temp_troop"),
+      (assign, reg20,0),
+      (troop_get_inventory_capacity, ":inv_cap", "$pool_troop"),
+      (try_for_range, ":i_slot", 0, ":inv_cap"),
+        (troop_get_inventory_slot, ":item_id", "$pool_troop", ":i_slot"),
+        (ge, ":item_id", 0),
+        (val_add, reg20,1),
+      (try_end),
+    ## CC
+      (try_for_range, ":cur_troop", pool_troops_begin, pool_troops_end),
+        (troop_get_inventory_capacity, ":inv_cap", ":cur_troop"),
+        (try_for_range, ":i_slot", 10, ":inv_cap"),
+          (troop_get_inventory_slot, ":item_id", ":cur_troop", ":i_slot"),
+          (ge, ":item_id", 0),
+          (val_add, reg20,1),
+        (try_end),
+      (try_end),
+    ## CC
+      # reg20 now contains number of items in loot pool
+      (try_begin),
+        (eq, reg20, 0),
+        (str_store_string, 10, "str_item_pool_no_items"),
+        (str_store_string, 20, "str_item_pool_leave"),
+      (else_try),
+        (eq, reg20, 1),
+        (str_store_string, 10, "str_item_pool_one_item"),
+        (str_store_string, 20, "str_item_pool_abandon"),
+      (else_try),
+        (str_store_string, 10, "str_item_pool_many_items"),
+        (str_store_string, 20, "str_item_pool_abandon"),
+      (try_end),
+    ],
+    [
+      ("loot", [],
+        "Access the item pools.", [(jump_to_menu, "mnu_auto_loot_item_pools"),]
+      ),
+      ("auto_loot_leave_with_nothing", 
+        [
+          (gt, reg20, 0),
+          (assign, reg1, "$g_price_threshold_for_picking"),
+          (gt, reg1, 0),
+        ],
+        "Pick the items which price higher than {reg1} denars and continue.",
+        [
+          (party_get_num_companion_stacks, ":num_stacks","p_main_party"),
+          (try_for_range, ":i_stack", 0, ":num_stacks"),
+            (party_stack_get_troop_id,":stack_troop","p_main_party",":i_stack"),
+            (is_between, ":stack_troop", companions_begin, companions_end),
+            (call_script, "script_transfer_special_inventory", "$pool_troop", ":stack_troop"), #special items
+            (try_for_range, ":cur_troop", pool_troops_begin, pool_troops_end),
+              (call_script, "script_transfer_special_inventory", ":cur_troop", ":stack_troop"), #special items
+            (try_end),
+          (try_end),
+          (call_script, "script_sort_food", "trp_player"),
+          (jump_to_menu, "$return_menu"),
+        ]
+      ),
+      ("auto_loot_leave", [],
+        "{s20}",
+        [
+          (party_get_num_companion_stacks, ":num_stacks","p_main_party"),
+          (try_for_range, ":i_stack", 0, ":num_stacks"),
+            (party_stack_get_troop_id,":stack_troop","p_main_party",":i_stack"),
+            (is_between, ":stack_troop", companions_begin, companions_end),
+            (call_script, "script_transfer_inventory", "$pool_troop", ":stack_troop", 1), #include book
+            (try_for_range, ":cur_troop", pool_troops_begin, pool_troops_end),
+              (call_script, "script_transfer_inventory", ":cur_troop", ":stack_troop", 1), #include book
+            (try_end),
+          (try_end),
+          (call_script, "script_sort_food", "trp_player"),
+          (jump_to_menu, "$return_menu"),
+        ]
+      ),
+      ## CC
+    ]
+  ),
+
+  ("auto_loot_item_pools", 0,
+    "Choose an item pool below to check it out.",
+    "none", [],
+    [
+      ("item_pools_back", [],
+        "Go back.",
+        [(jump_to_menu, "mnu_manage_loot_pool")]
+      ),
+      ("item_pools_1", [],
+        "Item pool-1",
+        [
+          (change_screen_loot, "trp_temp_troop"),
+        ]
+      ),
+    ]+[("item_pools_"+str(x+2),
+        [
+          (store_add, ":dest_troop", pool_troops_begin, x),
+          (store_free_inventory_capacity, ":free_space", ":dest_troop"),
+          (lt, ":free_space", 96),
+        ], "Item_pool-"+str(x+2),
+        [
+          (store_add, ":dest_troop", pool_troops_begin, x),
+          (troop_sort_inventory, ":dest_troop"),
+          (change_screen_loot, ":dest_troop"),
+        ]) for x in range(0, 10)
+      ]
+  ),
 ]

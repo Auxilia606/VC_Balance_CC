@@ -3898,5 +3898,10 @@ str_changing_gametype_is_not_voteable = 3896
 str_weapon_break = 3897
 str_no_suit_religion = 3898
 str_modifications = 3899
+str_item_pool_no_items = 3900
+str_item_pool_one_item = 3901
+str_item_pool_many_items = 3902
+str_item_pool_abandon = 3903
+str_item_pool_leave = 3904
 
 

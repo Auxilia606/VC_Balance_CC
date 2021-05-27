@@ -1629,3 +1629,7 @@ controller_keys
 controller_in_use
 dpad_menu
 dpad_menu_row
+return_menu
+inventory_menu_offset
+g_presentation_obj_34
+g_price_threshold_for_picking

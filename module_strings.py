@@ -4972,4 +4972,10 @@ Randomized ID, WB Version, VC Version, Start, Campaign, R, L, W, Track^\
   ("no_suit_religion", "You can't possibly think of marrying into my family since you do not even believe in the same gods! Convert first, then we may discuss this topic again."),
   ("modifications", "VC Balance Mod 13.0, by Hooded Horse"),
   
+  ("item_pool_no_items", "There are currently no items in the item pool."),
+	("item_pool_one_item", "There is one item left in the item pool."),
+	("item_pool_many_items", "There are {reg20} items left in the item pool."),
+	("item_pool_abandon", "Let NPCs to collect all the items left and continue."),
+	("item_pool_leave", "Done."),
+
 ]

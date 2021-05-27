@@ -552,3 +552,5 @@ menu_set_goal_trigger_new_game = 550
 menu_set_goal_message_complete_goal = 551
 menu_auto_start_presentation = 552
 menu_reconstruct_pre2049 = 553
+menu_manage_loot_pool = 554
+menu_auto_loot_item_pools = 555

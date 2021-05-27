@@ -17779,6 +17779,11 @@ presentations = [
             (position_set_x, pos1, 340),
             (position_set_y, pos1, 650),
             (overlay_set_position, "$g_presentation_obj_12", pos1),
+            #Party Inventory
+            (create_game_button_overlay,"$g_presentation_obj_34","@Party Inventory",tf_center_justify),
+            (position_set_x, pos1, 180),
+            (position_set_y, pos1, 25),
+            (overlay_set_position, "$g_presentation_obj_34", pos1),
             # Followers
             (party_get_num_companion_stacks, ":num_stacks","p_main_party"),
             (assign, ":num_men", 0),
@@ -18176,6 +18181,65 @@ presentations = [
           (else_try),
             (eq, ":object", "$g_presentation_obj_20"),	#VC-2111
             (assign, "$dog_companion", 0),
+          (else_try),
+            (eq, ":object", "$g_presentation_obj_34"), #Party Inventory
+            (str_clear,s1),
+            (assign,"$temp",0),
+            (assign,"$g_presentations_next_presentation",-1),
+
+            (troop_clear_inventory, "trp_temp_troop"),
+            (assign, "$return_menu", "mnu_camp"),
+            (assign, "$inventory_menu_offset", 0),
+          ## CC
+            (try_for_range, ":cur_troop", pool_troops_begin, pool_troops_end),
+              (troop_clear_inventory, ":cur_troop"), # clear_inventory
+            (try_end),
+            
+            (party_get_num_companion_stacks, ":num_stacks","p_main_party"),
+            (try_for_range, ":i_stack", 0, ":num_stacks"),
+              (party_stack_get_troop_id, ":this_hero","p_main_party",":i_stack"),
+              (is_between, ":this_hero", companions_begin, companions_end),
+              (try_for_range, ":cur_troop", pool_troops_begin, pool_troops_end),
+                (call_script, "script_transfer_inventory", ":this_hero", ":cur_troop", 0),
+              (try_end),
+            (try_end),
+            
+            (try_for_range, ":unused", 0, 86), # for 86 times
+              # find the best item
+              (assign, ":best_score", 0),
+              (assign, ":best_troop", -1),
+              (assign, ":best_slot", -1),
+              (try_for_range, ":cur_troop", pool_troops_begin, pool_troops_end),
+                (troop_get_inventory_capacity, ":inv_cap", ":cur_troop"),
+                (try_for_range, ":i_slot", 10, ":inv_cap"),
+                  (troop_get_inventory_slot, ":item", ":cur_troop", ":i_slot"),
+                  (troop_get_inventory_slot_modifier, ":imod", ":cur_troop", ":i_slot"),
+                  (gt, ":item", -1),
+                  (call_script, "script_get_item_value_with_imod", ":item", ":imod"),
+                  (assign, ":score", reg0),
+                  (val_div, ":score", 100),
+                  (val_max, ":score",1),
+                  (gt, ":score", ":best_score"),
+                  (assign, ":best_score", ":score"),
+                  (assign, ":best_troop", ":cur_troop"),
+                  (assign, ":best_slot", ":i_slot"),
+                (try_end),
+              (try_end),
+              (gt, ":best_score", 0),
+              # already found
+              (troop_get_inventory_slot, ":item", ":best_troop", ":best_slot"),
+              (troop_get_inventory_slot_modifier, ":imod", ":best_troop", ":best_slot"),
+              (troop_add_item, "trp_temp_troop", ":item", ":imod"), # add to trp_temp_troop
+              (troop_set_inventory_slot, ":best_troop", ":best_slot", -1), # remove it 
+            (try_end),
+            
+            # sort the rest items for  begin_troop - end_troop
+            (try_for_range, ":cur_troop", pool_troops_begin, pool_troops_end_minus_one),
+              (store_add, ":new_begin_troop", ":cur_troop", 1),
+              (call_script, "script_transfer_best_items_to_dest_troop_by_price", ":cur_troop", ":new_begin_troop", pool_troops_end, 96),
+            (try_end),
+          ## CC
+            (jump_to_menu, "mnu_manage_loot_pool"),
           (try_end),
           
       ]),

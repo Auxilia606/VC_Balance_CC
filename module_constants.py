@@ -54,6 +54,7 @@ slot_item_enterprise_building_cost      = 58 #enterprise building cost
 
 slot_item_multiplayer_faction_price_multipliers_begin = 60 #reserve around 10 slots after this
 slot_item_multiplayer_item_class                      = 70 #temporary, can be moved to higher values
+slot_item_modifier_multiplier                         = 72
 slot_item_multiplayer_availability_linked_list_begin  = 100 #temporary, can be moved to higher values, in Native, there are about 60 of these
 
 ########################################################
@@ -2953,3 +2954,7 @@ dot_alpha       = 0xC0  #75%
 vc_work_payment_1 = 15
 vc_work_payment_2 = 20
 vc_work_payment_3 = 25
+
+pool_troops_begin = "trp_reuse1"
+pool_troops_end_minus_one = "trp_reuse10"
+pool_troops_end = "trp_reuse11"
