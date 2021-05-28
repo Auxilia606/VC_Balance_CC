@@ -7262,18 +7262,52 @@ game_menus = [
         (troop_clear_inventory, "trp_temp_troop"),
         (call_script, "script_party_calculate_loot", "p_total_enemy_casualties"), #p_encountered_party_backup changed to total_enemy_casualties
         (gt, reg0, 0),
+        (troop_sort_inventory, "trp_temp_troop"),
         (gt, "$loot_value_before", 0), #new
         
-        (troop_sort_inventory, "trp_temp_troop"),
         #vc loot changes begin
         (try_begin),
           (eq, "$loot_option", 0),
-          (change_screen_loot, "trp_temp_troop"),
+          ## CC
+          # Autoloot: Instead of just displaying the loot screen, we display a loot management menu instead
+          (assign, ":num_companions", 0),
+          (party_get_num_companion_stacks, ":num_stacks", "p_main_party"),
+          (try_for_range, ":stack_no", 0, ":num_stacks"),
+            (party_stack_get_troop_id,   ":stack_troop", "p_main_party", ":stack_no"),
+            (is_between, ":stack_troop", companions_begin, companions_end),
+            (val_add, ":num_companions", 1),
+          (try_end),
+          (try_begin),
+            (gt, ":num_companions", 0),
+            (assign, "$return_menu", "mnu_bandit_lair"),
+            (jump_to_menu, "mnu_manage_loot_pool"),
+          (else_try),
+            (change_screen_loot, "trp_temp_troop"),
+          (try_end),
+          #end Autoloot
+          ## CC
         (else_try),
           (eq, "$loot_option", 1),
           (call_script, "script_change_party_morale", "p_main_party", -20),
           (display_message, "@Your party lost {reg1} morale.", color_bad_news),
-          (change_screen_loot, "trp_temp_troop"),
+          ## CC
+          # Autoloot: Instead of just displaying the loot screen, we display a loot management menu instead
+          (assign, ":num_companions", 0),
+          (party_get_num_companion_stacks, ":num_stacks", "p_main_party"),
+          (try_for_range, ":stack_no", 0, ":num_stacks"),
+            (party_stack_get_troop_id,   ":stack_troop", "p_main_party", ":stack_no"),
+            (is_between, ":stack_troop", companions_begin, companions_end),
+            (val_add, ":num_companions", 1),
+          (try_end),
+          (try_begin),
+            (gt, ":num_companions", 0),
+            (assign, "$return_menu", "mnu_bandit_lair"),
+            (jump_to_menu, "mnu_manage_loot_pool"),
+          (else_try),
+            (change_screen_loot, "trp_temp_troop"),
+          (try_end),
+          #end Autoloot
+          ## CC
         (else_try),
           (eq, "$loot_option", 2),
           (call_script, "script_change_party_morale", "p_main_party", 1),

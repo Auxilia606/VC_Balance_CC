@@ -18190,7 +18190,7 @@ presentations = [
             (troop_clear_inventory, "trp_temp_troop"),
             (assign, "$return_menu", "mnu_camp"),
             (assign, "$inventory_menu_offset", 0),
-          ## CC
+            ## CC
             (try_for_range, ":cur_troop", pool_troops_begin, pool_troops_end),
               (troop_clear_inventory, ":cur_troop"), # clear_inventory
             (try_end),
@@ -18215,7 +18215,7 @@ presentations = [
                   (troop_get_inventory_slot, ":item", ":cur_troop", ":i_slot"),
                   (troop_get_inventory_slot_modifier, ":imod", ":cur_troop", ":i_slot"),
                   (gt, ":item", -1),
-                  (call_script, "script_get_item_value_with_imod", ":item", ":imod"),
+                  (call_script, "script_store_item_price", ":item", ":imod"),
                   (assign, ":score", reg0),
                   (val_div, ":score", 100),
                   (val_max, ":score",1),
@@ -18238,7 +18238,7 @@ presentations = [
               (store_add, ":new_begin_troop", ":cur_troop", 1),
               (call_script, "script_transfer_best_items_to_dest_troop_by_price", ":cur_troop", ":new_begin_troop", pool_troops_end, 96),
             (try_end),
-          ## CC
+            ## CC
             (jump_to_menu, "mnu_manage_loot_pool"),
           (try_end),
           
