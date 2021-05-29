@@ -5047,6 +5047,7 @@ edited_native_scripts = [
       (val_div, ":price_factor", ":penalty_divisor"),
       
       (assign, reg0, ":price_factor"),
+      (display_message, "@{!}DEBUG 1 {reg0}"), #FOR TEST
       (set_trigger_result, reg0),
   ]),
   
@@ -66286,13 +66287,13 @@ vc_scripts = [
       (item_get_value, ":price", ":item_id"),
       (try_begin),
         (gt, ":item_id", "itm_no_item"),
-        (call_script, "script_game_get_item_buy_price_factor", ":item_id"),
-        (val_mul, ":price", reg0),
+        # (call_script, "script_game_get_item_buy_price_factor", ":item_id"),
+        # (val_mul, ":price", reg0),
         
         (item_get_type, ":item_type", ":item_id"),
         (call_script, "script_get_item_modifier_effects", ":item_type", ":item_mod"),
         (val_mul, ":price", reg5),
-        (val_div, ":price", 10000),
+        (val_div, ":price", 100),
       (try_end),
       
       (assign, reg0, ":price"),]),
@@ -78239,8 +78240,10 @@ vc_text_scripts = [
       (item_slot_eq, ":type", slot_item_type_not_for_sell, 0),
       (call_script, "script_store_item_price", ":item", ":imod"),
       (assign, ":score", reg0),
+      (display_message, "@{reg0} score"),
       (call_script, "script_game_get_item_sell_price_factor", ":item"),
       (assign, ":sell_price_factor", reg0),
+      (display_message, "@{reg0} sell_price_factor"),
       (val_mul, ":score", ":sell_price_factor"),
       (val_div, ":score", 100),
       (val_max, ":score", 1),
