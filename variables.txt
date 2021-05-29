@@ -1633,3 +1633,5 @@ return_menu
 inventory_menu_offset
 g_presentation_obj_34
 g_price_threshold_for_picking
+g_auto_sell_price_limit
+pool_troop

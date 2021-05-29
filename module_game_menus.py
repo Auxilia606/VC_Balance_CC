@@ -18376,6 +18376,14 @@ game_menus = [
     [ (call_script, "script_set_town_picture"),
     ],
     [
+      ## CC
+      ("auto_sell",[],
+       "Sell items automaticly.",
+       [
+          (assign, "$g_next_menu", "mnu_town"),
+          (jump_to_menu,"mnu_trade_auto_sell_begin"),
+        ]),
+      ## CC
       ("assess_prices",
         [
           (store_faction_of_party, ":current_town_faction", "$current_town"),
@@ -37581,5 +37589,34 @@ game_menus = [
           (change_screen_loot, ":dest_troop"),
         ]) for x in range(0, 10)
       ]
+  ),
+
+  ## CC
+  (
+    "trade_auto_sell_begin",0,
+    "Items in the inventory of companions\
+ which selected as the type for sell and their prices below {reg1} peningas\
+ will be sold to {reg2?all merchants:the elder} in current {reg2?town:village} automaticly.\
+ Specifically foods, trade goods and books will never be sold.\
+^^You can change some settings here freely. ",
+    "none",
+    [
+      (assign, reg1, "$g_auto_sell_price_limit"),
+      (try_begin),
+        (is_between, "$current_town", towns_begin, towns_end),
+        (assign, reg2, 1),
+      (else_try),
+        (assign, reg2, 0),
+      (try_end),
+    ],
+    [
+      ("continue",[],"Continue...",
+      [
+        (call_script, "script_auto_sell_all"),
+        (jump_to_menu, "$g_next_menu"),
+        ]),
+      ("change_settings",[],"Change settings.",[(start_presentation, "prsnt_auto_sell_options"),]),
+      ("go_back",[],"Go back",[(jump_to_menu, "$g_next_menu")]),
+    ]
   ),
 ]

@@ -81,7 +81,7 @@ items = [
  ["tutorial_throwing_daggers",  "Javelins", [("javelin",0),("javelin_carry", ixmesh_carry)],  itp_type_thrown |itp_primary|itp_bonus_against_shield ,itcf_throw_javelin|itcf_carry_quiver_back|itcf_show_holster_when_drawn, 
 200, weight(1)|difficulty(0)|spd_rtng(90) | shoot_speed(28) | thrust_damage(24 ,  pierce)|max_ammo(4)|weapon_length(65)|accuracy(99),imodbits_thrown ], #chief cambiado max_ammo
  ["tutorial_saddle_horse","Frankish Stallion", [("light_horse",0),("light_horse",imodbits_horse_good)], itp_merchandise|itp_type_horse, 0,
-  9300,abundance(10)|body_armor(18)|hit_points(140)|difficulty(4)|horse_speed(48)|horse_maneuver(38)|horse_charge(24)|horse_scale(98),imodbits_horse_good, [], [fac_kingdom_4]],
+  9300,abundance(10)|body_armor(18)|hit_points(240)|difficulty(4)|horse_speed(48)|horse_maneuver(38)|horse_charge(24)|horse_scale(98),imodbits_horse_good, [], [fac_kingdom_4]],
  ["tutorial_shield", "Round Shield", [("Roundshield_01",0)], itp_type_shield|itp_wooden_parry, itcf_carry_round_shield,
   330 , weight(4.5)|hit_points(310)|body_armor(20)|spd_rtng(85)|shield_width(43),imodbits_shield], 
 
@@ -141,7 +141,7 @@ items = [
 200, weight(1)|difficulty(0)|spd_rtng(90) | shoot_speed(28) | thrust_damage(24 ,  pierce)|max_ammo(100)|weapon_length(65)|accuracy(99),imodbits_thrown ], #chief cambiado max_ammo
 # ["cheap_shirt","Cheap Shirt", [("shirt",0)], itp_type_body_armor|itp_covers_legs, 0, 4,weight(1.25)|body_armor(3),imodbits_none],
  ["practice_horse","Frankish Stallion", [("pale_horse",0),("pale_horse",imodbits_horse_good)], itp_merchandise|itp_type_horse, 0,
-  9300,abundance(10)|body_armor(18)|hit_points(140)|difficulty(4)|horse_speed(48)|horse_maneuver(38)|horse_charge(24)|horse_scale(98),imodbits_horse_good, [], [fac_kingdom_4]],
+  9300,abundance(10)|body_armor(18)|hit_points(240)|difficulty(4)|horse_speed(48)|horse_maneuver(38)|horse_charge(24)|horse_scale(98),imodbits_horse_good, [], [fac_kingdom_4]],
  ["practice_arrows","Arrows", [("arrow",0),("flying_arrow",ixmesh_flying_ammo),("quiver3", ixmesh_carry)], itp_type_arrows|itp_default_ammo, itcf_carry_bowcase_left,
   100,weight(1)|abundance(110)|weapon_length(95)|thrust_damage(1,pierce)|max_ammo(40),imodbits_missile],
  ["practice_bolts","Sling Rocks", [("throwing_stone",0),("throwing_stone",ixmesh_flying_ammo)], itp_type_bullets, 0,
@@ -317,9 +317,9 @@ items = [
 
 #horse normal, britons and irish
  ["common_horse","Horse", [("Horse_01",0),("Horse_01",imodbits_horse_good)], itp_merchandise|itp_type_horse, 0,
-  6300,abundance(10)|body_armor(16)|hit_points(100)|difficulty(2)|horse_speed(50)|horse_maneuver(40)|horse_charge(18)|horse_scale(92),imodbits_horse_good],
+  6300,abundance(10)|body_armor(16)|hit_points(180)|difficulty(2)|horse_speed(50)|horse_maneuver(40)|horse_charge(18)|horse_scale(92),imodbits_horse_good],
  ["common_horse2","Horse", [("Horse_02",0),("Horse_02",imodbits_horse_good)], itp_merchandise|itp_type_horse, 0,
-  6300,abundance(10)|body_armor(16)|hit_points(100)|difficulty(2)|horse_speed(50)|horse_maneuver(40)|horse_charge(18)|horse_scale(92),imodbits_horse_good],
+  6300,abundance(10)|body_armor(16)|hit_points(180)|difficulty(2)|horse_speed(50)|horse_maneuver(40)|horse_charge(18)|horse_scale(92),imodbits_horse_good],
 #pony with saddle all factions
 ["common_pony","Pony", [("Pony_01",0),("Pony_01",imodbits_horse_basic)], itp_merchandise|itp_type_horse, 0,
   3700,abundance(30)|hit_points(90)|body_armor(10)|difficulty(1)|horse_speed(43)|horse_maneuver(36)|horse_charge(12)|horse_scale(86),imodbits_horse_basic],
@@ -327,13 +327,13 @@ items = [
   3700,abundance(30)|hit_points(90)|body_armor(10)|difficulty(1)|horse_speed(43)|horse_maneuver(36)|horse_charge(12)|horse_scale(86),imodbits_horse_basic],
 #Wild pony -no saddle- pictish only
  ["wild_horse","Horse", [("Wild_Horse_01",0),("Wild_Horse_01",imodbits_horse_good)], itp_merchandise|itp_type_horse, 0,
-  6300,abundance(10)|body_armor(16)|hit_points(100)|difficulty(2)|horse_speed(50)|horse_maneuver(40)|horse_charge(18)|horse_scale(92),imodbits_horse_good, [], [fac_kingdom_20]], #only pictish
+  6300,abundance(10)|body_armor(16)|hit_points(150)|difficulty(2)|horse_speed(50)|horse_maneuver(40)|horse_charge(18)|horse_scale(92),imodbits_horse_good, [], [fac_kingdom_20]], #only pictish
  ["wild_horse2","Horse", [("Wild_Horse_02",0),("Wild_Horse_02",imodbits_horse_good)], itp_merchandise|itp_type_horse, 0,
-  6300,abundance(10)|body_armor(16)|hit_points(100)|difficulty(2)|horse_speed(50)|horse_maneuver(40)|horse_charge(18)|horse_scale(92),imodbits_horse_good, [], [fac_kingdom_20]], #only pictish
+  6300,abundance(10)|body_armor(16)|hit_points(150)|difficulty(2)|horse_speed(50)|horse_maneuver(40)|horse_charge(18)|horse_scale(92),imodbits_horse_good, [], [fac_kingdom_20]], #only pictish
  ["wild_pony","Rus Mount", [("brown_pony",0),("brown_pony",imodbits_horse_good)], itp_merchandise|itp_type_horse, 0,
-  9900,abundance(10)|body_armor(28)|hit_points(120)|difficulty(3)|horse_speed(46)|horse_maneuver(44)|horse_charge(20)|horse_scale(88),imodbits_horse_good, [], [fac_kingdom_1]],
+  9900,abundance(10)|body_armor(28)|hit_points(300)|difficulty(3)|horse_speed(46)|horse_maneuver(44)|horse_charge(20)|horse_scale(88),imodbits_horse_good, [], [fac_kingdom_1]],
  ["wild_pony2","Rus Mount", [("grey_pony",0),("grey_pony",imodbits_horse_good)], itp_merchandise|itp_type_horse, 0,
-  9900,abundance(10)|body_armor(28)|hit_points(120)|difficulty(3)|horse_speed(46)|horse_maneuver(44)|horse_charge(20)|horse_scale(88),imodbits_horse_good, [], [fac_kingdom_1]],
+  9900,abundance(10)|body_armor(28)|hit_points(300)|difficulty(3)|horse_speed(46)|horse_maneuver(44)|horse_charge(20)|horse_scale(88),imodbits_horse_good, [], [fac_kingdom_1]],
 #cows alls factions. No vendible
   ["cow1","Cow", [("cow_1",0)], 0, 0,
    1200,abundance(40)|hit_points(60)|body_armor(6)|horse_speed(18)|horse_maneuver(26)|horse_charge(12)|horse_scale(91),imodbits_horse_basic],

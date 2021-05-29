@@ -101,3 +101,4 @@ prsnt_game_concepts_tutorial = 99
 prsnt_start_storyline = 100
 prsnt_vc_debug = 101
 prsnt_game_escape = 102
+prsnt_auto_sell_options = 103

@@ -18217,7 +18217,6 @@ presentations = [
                   (gt, ":item", -1),
                   (call_script, "script_store_item_price", ":item", ":imod"),
                   (assign, ":score", reg0),
-                  (val_div, ":score", 100),
                   (val_max, ":score",1),
                   (gt, ":score", ":best_score"),
                   (assign, ":best_score", ":score"),
@@ -27925,4 +27924,53 @@ presentations = [
   ),
   
   ("game_escape",0,0,[]),
+
+  ("auto_sell_options", 0, mesh_load_window, [
+    (ti_on_presentation_load, [
+      (presentation_set_duration, 999999),
+      (set_fixed_point_multiplier, 1000),
+
+      ## price_limit
+      (create_text_overlay, reg0, "@Price limit for auto-sell:", tf_vertical_align_center),
+      (position_set_x, pos1, 150),
+      (position_set_y, pos1, 610),
+      (overlay_set_position, reg0, pos1),
+
+      (create_number_box_overlay, "$g_presentation_obj_2", 10, 10000),
+      (position_set_x, pos1, 600),
+      (position_set_y, pos1, 596),
+      (overlay_set_val, "$g_presentation_obj_2", "$g_auto_sell_price_limit"),
+      (overlay_set_position, "$g_presentation_obj_2", pos1),
+
+      # done
+      (create_game_button_overlay, "$g_presentation_obj_3", "@Done"),
+      (position_set_x, pos1, 900),
+      (position_set_y, pos1, 25),
+      (overlay_set_position, "$g_presentation_obj_3", pos1),
+
+      ####### mouse fix pos system #######
+      #(call_script, "script_mouse_fix_pos_ready"),
+      ####### mouse fix pos system #######
+    ]),
+
+      #(ti_on_presentation_run,
+        #[
+        ####### mouse fix pos system #######
+        #(call_script, "script_mouse_fix_pos_run"),
+        ####### mouse fix pos system #######
+      #]),
+
+    (ti_on_presentation_event_state_change, [
+      (store_trigger_param_1, ":object"),
+      (store_trigger_param_2, ":value"),
+
+      (try_begin),
+        (eq, ":object", "$g_presentation_obj_2"),
+        (assign, "$g_auto_sell_price_limit", ":value"),
+      (else_try),
+        (eq, ":object", "$g_presentation_obj_3"),
+        (presentation_set_duration, 0),
+      (try_end),
+    ]),
+  ]),
 ]

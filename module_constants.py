@@ -55,6 +55,7 @@ slot_item_enterprise_building_cost      = 58 #enterprise building cost
 slot_item_multiplayer_faction_price_multipliers_begin = 60 #reserve around 10 slots after this
 slot_item_multiplayer_item_class                      = 70 #temporary, can be moved to higher values
 slot_item_modifier_multiplier                         = 72
+slot_item_type_not_for_sell                           = 73
 slot_item_multiplayer_availability_linked_list_begin  = 100 #temporary, can be moved to higher values, in Native, there are about 60 of these
 
 ########################################################
