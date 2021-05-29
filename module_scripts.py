@@ -5047,7 +5047,6 @@ edited_native_scripts = [
       (val_div, ":price_factor", ":penalty_divisor"),
       
       (assign, reg0, ":price_factor"),
-      (display_message, "@{!}DEBUG 1 {reg0}"), #FOR TEST
       (set_trigger_result, reg0),
   ]),
   
@@ -78240,10 +78239,10 @@ vc_text_scripts = [
       (item_slot_eq, ":type", slot_item_type_not_for_sell, 0),
       (call_script, "script_store_item_price", ":item", ":imod"),
       (assign, ":score", reg0),
-      (display_message, "@{reg0} score"),
+      # (display_message, "@{reg0} score"),
       (call_script, "script_game_get_item_sell_price_factor", ":item"),
       (assign, ":sell_price_factor", reg0),
-      (display_message, "@{reg0} sell_price_factor"),
+      # (display_message, "@{reg0} sell_price_factor"),
       (val_mul, ":score", ":sell_price_factor"),
       (val_div, ":score", 100),
       (val_max, ":score", 1),
